@@ -1,0 +1,69 @@
+CREATE DATABASE networkmonitor;
+
+USE networkmonitor;
+
+DROP TABLE t_member;
+// 서비스 이용자
+CREATE TABLE t_member (
+	id VARCHAR(100) PRIMARY key,
+	NAME VARCHAR(100),
+	PASSWORD VARCHAR(100),
+	email VARCHAR(100),
+	loginattempt varchar(10) default '0',
+	activiation varchar(1) default '1',
+	regdate DATETIME DEFAULT NOW(),
+	adminflag VARCHAR(1)
+);
+
+INSERT INTO t_member VALUES ('admin', 'admin', '2ac29c6465df3cb88fb162c2cada5aa6e33569da35182199f4dd16bbd6bcf142',
+'admin', NOW(), 'Y');
+
+SELECT * FROM t_member;
+
+DROP TABLE t_accesslog;
+// 서비스 접속 기록
+CREATE TABLE t_accesslog (
+	id VARCHAR(100),
+	NAME VARCHAR(100),
+	ip VARCHAR(50),
+	machine VARCHAR(50),
+	accesstime DATETIME DEFAULT NOW(),
+	activity VARCHAR(50)
+);
+
+SELECT * FROM t_accesslog;
+
+DROP TABLE t_resource;
+// 서비스에서 제공하는 자원 사용량
+CREATE TABLE t_resource (
+	resource VARCHAR(10),
+	used VARCHAR(10),
+	CURTIME DATETIME DEFAULT NOW()
+);
+
+INSERT INTO t_resource (RESOURCE, used, total) VALUES ('cpu', '20', '100');
+INSERT INTO t_resource (RESOURCE, used, total) VALUES ('memory', '70', '100');
+INSERT INTO t_resource (RESOURCE, used, total) VALUES ('disk', '80', '100');
+
+SELECT RESOURCE, used, total, curtime FROM t_resource;
+SELECT COUNT(*) AS cnt FROM t_resource;
+SELECT * FROM t_resource ORDER BY CURTIME desc;
+
+// 서버에 연결된 네트워크 정보
+CREATE TABLE t_netstat (
+    localip varchar(50),
+    localport varchar(20),
+    remoteip varchar(20),
+    remoteport varchar(20),
+    status varchar(100),
+    curtime datetime default()
+);
+
+// 서버의 트래픽 모니터링
+CREATE TABLE t_monitor (
+    localip varchar(50),
+    localport varchar(20),
+    remoteip varchar(20),
+    remoteport varchar(20),
+    protocol varchar(20)
+);
